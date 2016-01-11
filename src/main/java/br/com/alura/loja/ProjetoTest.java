@@ -12,7 +12,7 @@ public class ProjetoTest {
 	public void testaQueAConexaoComOServidorFunciona() {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://127.0.0.1:8080");
-		String conteudo = target.path("/carrinhos").request().get(String.class);
+		String conteudo = target.path("/projetos").request().get(String.class);
 		Assert.assertTrue(conteudo.contains("Minha loja"));
 	}
 }
