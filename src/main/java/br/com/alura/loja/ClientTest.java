@@ -49,7 +49,7 @@ public class ClientTest {
 	}
 
 	@Test
-	public void testeParaOPost() {
+	public void testaRecebimentoDeNovosCarrinhos() {
 		Client client = ClientBuilder.newClient();
 		WebTarget target = client.target("http://localhost:8080");
 		Carrinho carrinho = new Carrinho();
@@ -60,7 +60,7 @@ public class ClientTest {
 		Entity<String> entity = Entity.entity(xml, MediaType.APPLICATION_XML);
 
 		Response response = target.path("/carrinhos").request().post(entity);
-		Assert.assertEquals("<status>sucesso</status>", response.readEntity(String.class));
+		Assert.assertEquals(201, response.getStatus());
 	}
 
 	@After
