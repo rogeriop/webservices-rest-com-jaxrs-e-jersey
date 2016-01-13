@@ -8,6 +8,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -22,16 +24,21 @@ import br.com.alura.loja.modelo.Projeto;
 public class ClientTest {
 
 	private HttpServer servidor;
+	private Client client;
+	private WebTarget target;
 
 	@Before
 	public void startaServidor() {
 		servidor = Servidor.startaServidor();
+		ClientConfig config = new ClientConfig();
+		config.register(new LoggingFilter());
+		this.client = ClientBuilder.newClient(config);
+		this.target = client.target("http://127.0.0.1:8080");
 	}
 
 	@Test
 	public void testaQueBuscarUmCarrinhoTrazOCarrinhoEsperado() {
 		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target("http://127.0.0.1:8080");
 		String conteudo = target.path("/carrinhos/1").request().get(String.class);
 
 		Carrinho carrinho = (Carrinho) new XStream().fromXML(conteudo);
@@ -41,7 +48,6 @@ public class ClientTest {
 	@Test
 	public void testaQueBuscarUmProjetoTrazOProjetoSelcionado() {
 		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target("http://127.0.0.1:8080");
 		String conteudo = target.path("/projetos/1").request().get(String.class);
 
 		Projeto projeto = (Projeto) new XStream().fromXML(conteudo);
